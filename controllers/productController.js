@@ -21,7 +21,7 @@ export async function getProducts(req,res){
 
 export function saveProducts(req,res){
 
-    if(!isAdmin(res)){
+    if(!isAdmin(req)){
         res.status(403).json({
             message : "You are not autherized to add product"
         })
@@ -39,8 +39,8 @@ export function saveProducts(req,res){
     }).catch(()=>{
         res.json({
             message : "Failed to add product",
-        })
-    })
+        });
+    });
 }
 
 export async function deleteProduct(req,res){

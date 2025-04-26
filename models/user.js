@@ -28,8 +28,12 @@ const userSchema = mongoose.Schema({
         required : true,
         default : false
     },
+    img : {
+        type : String,
+        required : false,
+    }
     
-})
+});
 
 const User = mongoose.model("users",userSchema);
 

@@ -3,7 +3,6 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
 export function createUser(req,res){
-
     if(req.body.role == "admin"){
         if(req.user!= null){
             if(req.user.role != "admin"){
@@ -64,7 +63,8 @@ export function loginUser(req,res){
                             email : user.email,
                             firstName : user.firstName,
                             lastName : user.lastName,
-                            role : user.role
+                            role : user.role,
+                            img : user.img
                         },
                         "cbc-batch-five#@2025"
                     )
@@ -87,7 +87,7 @@ export function isAdmin(req){
     if(req.user == null){
         return false
     }
-    if(res.userrole != "admin"){
+    if(req.user.role != "admin"){
         return false
     }
     return true
