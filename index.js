@@ -1,53 +1,57 @@
 import express from 'express';
 import bodyParser from 'body-parser';
-import mongoose, { Schema } from 'mongoose';
+import mongoose from 'mongoose';
 import productRouter from './router/productRouter.js';
 import userRouter from './router/userRouter.js';
 import jwt from 'jsonwebtoken';
-
-
-let app=express();
+import orderRouter from './router/orderRouter.js';
+const app = express();
 
 app.use(bodyParser.json())
 
 app.use(
     (req,res,next)=>{
-        const tokenString = req.header("Autherization")
+        const tokenString = req.header("Authorization")
         if(tokenString != null){
-            const token = tokenString.replace("Bearer","")
+            const token = tokenString.replace("Bearer ", "")
 
-          jwt.verify(token, "cbc-batch-five#@2025" ,
-            (err,decoded)=>{
-                if(decoded != null){
-                    req.user = decoded
-                    next()
-                }else{
-                    console.log("invalid token")
-                    res.status(403).json({
-                        message : "invalid token"
-                    })
+            jwt.verify(token, "cbc-batch-five#@2025" , 
+                (err,decoded)=>{
+                    if(decoded != null){
+                        req.user = decoded
+                        next()
+                    }else{
+                        console.log("invalid token")
+                        res.status(403).json({
+                            message : "Invalid token"
+                        })
+                    }
                 }
-            }
-          )
+            )
+
         }else{
-        next()
+            next()
         }
     }
 )
 
-mongoose.connect("mongodb+srv://admin:123@clusteranaas.jgghk.mongodb.net/?retryWrites=true&w=majority&appName=ClusterAnaas").
-then(()=>{
-    console.log("connected to the database")
+mongoose.connect("mongodb+srv://admin:123@clusteranaas.jgghk.mongodb.net/?retryWrites=true&w=majority&appName=ClusterAnaas")
+.then(()=>{
+    console.log("Connected to the database")
 }).catch(()=>{
-    console.log("database connection fail")
+    console.log("Database connection failed")
 })
 
-//mongodb+srv://admin:123@clusteranaas.jgghk.mongodb.net/?retryWrites=true&w=majority&appName=ClusterAnaas
 
-app.use("/products",productRouter)
+
+
+app.use("/products", productRouter)
 app.use("/users",userRouter)
+app.use("/orders",orderRouter)
 
-app.listen(5000 , ()=>
-{
-    console.log('Server is running in port 5000')
-})
+
+app.listen( 5000, 
+    ()=>{
+        console.log('Server is running on port 5000');
+    }
+)

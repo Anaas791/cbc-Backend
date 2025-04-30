@@ -1,13 +1,13 @@
 import express from "express";
 
-import {deleteProduct,getProducts,saveProducts,getProductById,updateProduct} from "../controllers/productController.js";
+import {deleteProduct,getProducts,saveProduct,getProductById,updateProduct} from "../controllers/productController.js";
 
 const productRouter = express.Router();
 
 productRouter.get("/",getProducts);
-productRouter.post("/",saveProducts);
-/*productRouter.delete("/",deleteProduct);
-productRouter.put("/",updateProduct);
-productRouter.get("/",getProductById) */
+productRouter.post("/",saveProduct);
+productRouter.delete("/:productId",deleteProduct);
+productRouter.put("/:productId",updateProduct);
+productRouter.get("/:productId",getProductById);
 
 export default productRouter;
